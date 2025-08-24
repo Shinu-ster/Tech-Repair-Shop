@@ -23,8 +23,8 @@ export const insertCustomerSchema = z.object({
       /^\d{3}-\d{3}-\d{4}$/,
       "Invalid phone number format. Use XXX-XXX-XXXX"
     ),
-  notes: z.string().nullable().default(""),
-  active: z.boolean().default(true),
+  notes: z.string().nullable(),
+  active: z.boolean(),
 });
 
 // export const selectCustomerSchema = createSelectSchema(customers);

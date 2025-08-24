@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -52,6 +52,8 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
     active: true,
   };
 
+  
+
   const defaultValues: insertCustomerSchemaType = hasCustomerId
     ? {
         id: customer?.id ?? 0,
@@ -99,9 +101,10 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
     },
   });
 
-  async function submitForm(data: insertCustomerSchemaType) {
+const submitForm: SubmitHandler<insertCustomerSchemaType> = async (data) => {
   executeSave(data);
-}
+};
+
 
 
   return (
