@@ -71,7 +71,7 @@ export default function CustomerTable({ data }: Props) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href={`/tickets/form?customerId=${row.original.id}`}
+            <Link href={`/customers/form?customerId=${row.original.id}`}
             className="w-full"
             prefetch={false}>
               Edit Customer

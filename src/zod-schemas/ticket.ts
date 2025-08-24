@@ -2,39 +2,28 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { tickets } from "@/db/schema";
 import { z } from "zod";
 
-const baseTicketSchema = createInsertSchema(tickets).omit({
-  id: true,
-  description: true,
-});
-
-export const insertTicketSchema = baseTicketSchema.extend({
+export const insertTicketSchema = z.object({
   id: z.union([z.number(), z.literal("(New)")]),
-  title: baseTicketSchema.shape.title.min(1, "Title is required"),
+  customerId: z.number(),
+  title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  tech: baseTicketSchema.shape.tech.refine(
-    (val) => typeof val === "string" && val.includes("@"),
-    {
-      message: "Invalid email address",
-    }
-  ),
+  tech: z.string().email("Invalid email address"),
+  completed: z.boolean().optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
-export const selectTicketSchema = createSelectSchema(tickets);
+export const selectTicketSchema = z.object({
+  id: z.number(),
+  customerId: z.number(),
+  title: z.string(),
+  description: z.string().nullable(),
+  completed: z.boolean(),
+  tech: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
 
-type AnyZodObject = z.ZodTypeAny;
+export type selectTicketSchemaType = z.infer<typeof selectTicketSchema>;
 
-
-export type insertTicketSchemaType = z.infer<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ReturnType<typeof insertTicketSchema.parse> extends infer _
-    ? AnyZodObject
-    : never
->;
-
-
-export type selectTicketSchemaType = z.infer<
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ReturnType<typeof selectTicketSchema.parse> extends infer _
-    ? AnyZodObject
-    : never
->; 
+export type insertTicketSchemaType = z.infer<typeof insertTicketSchema>;

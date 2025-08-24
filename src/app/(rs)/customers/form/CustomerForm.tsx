@@ -48,7 +48,7 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
     zip: "",
     phone: "",
     email: "",
-    notes: "",
+    notes: null,
     active: true,
   };
 
@@ -64,7 +64,7 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
         zip: customer?.zip ?? "",
         phone: customer?.phone ?? "",
         email: customer?.email ?? "",
-        notes: customer?.notes ?? "",
+        notes: customer?.notes ?? null,
         active: customer?.active ?? true,
       }
     : emptyValues;
@@ -100,8 +100,9 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
   });
 
   async function submitForm(data: insertCustomerSchemaType) {
-    executeSave(data);
-  }
+  executeSave(data);
+}
+
 
   return (
     <div className="flex flex-col gap-1 sm:px-8">

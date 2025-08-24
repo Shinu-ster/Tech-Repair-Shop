@@ -1,37 +1,59 @@
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { customers } from "@/db/schema";
 import { z } from "zod";
-const baseCustomerSchema = createInsertSchema(customers);
 
-export const insertCustomerSchema = baseCustomerSchema.extend({
-  firstName: baseCustomerSchema.shape.firstName.min(
-    1,
-    "First name is required"
-  ),
-  lastName: baseCustomerSchema.shape.lastName.min(1, "Last name is required"),
-  address1: baseCustomerSchema.shape.address1.min(1, "Address is required"),
-  city: baseCustomerSchema.shape.city.min(1, "City is required"),
-  state: baseCustomerSchema.shape.state.length(
-    2,
-    "State must be exactly 2 characters"
-  ),
-  email: baseCustomerSchema.shape.email.email("Invalid email address"),
-  zip: baseCustomerSchema.shape.zip.regex(
-    /^\d{5}(-\d{4})?$/,
-    "Invalid Zip code. Use 5 digits or 5 digits followed by a hyphen and 4 digits"
-  ),
-  phone: baseCustomerSchema.shape.phone.regex(
-    /^\d{3}-\d{3}-\d{4}$/,
-    "Invalid phone number format. Use XXX-XXX-XXXX"
-  ),
+export const insertCustomerSchema = z.object({
+  id: z.number(),
+  firstName: z.string().min(1, "First Name required"),
+  lastName: z.string().min(1, "Last Name required"),
+  address1: z.string().min(1, "Address Required"),
+  address2: z.string().min(1, "Address Required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().length(2, "State must be exactly 2 characters"),
+  email: z.string().email("Invalid Email"),
+  zip: z
+    .string()
+    .regex(
+      /^\d{5}(-\d{4})?$/,
+      "Invalid Zip code. Use 5 digits or 5 digits followed by a hyphen and 4 digits"
+    ),
+  phone: z
+    .string()
+    .regex(
+      /^\d{3}-\d{3}-\d{4}$/,
+      "Invalid phone number format. Use XXX-XXX-XXXX"
+    ),
+  notes: z.string().nullable().default(""),
+  active: z.boolean().default(true),
 });
 
-export const selectCustomerSchema = createSelectSchema(customers);
-type AnyZodObject = z.ZodTypeAny;
+// export const selectCustomerSchema = createSelectSchema(customers);
 
-// Narrow with ReturnType so TS doesn't try to expand the full thing
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type insertCustomerSchemaType = z.infer<ReturnType<typeof insertCustomerSchema.parse> extends infer _ ? AnyZodObject : never>;
+export const selectCustomerSchema = z.object({
+  id: z.number(),
+  firstName: z.string().min(1, "First Name required"),
+  lastName: z.string().min(1, "Last Name required"),
+  address1: z.string().min(1, "Address Required"),
+  address2: z.string().min(1, "Address Required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().length(2, "State must be exactly 2 characters"),
+  email: z.string().email("Invalid Email"),
+  zip: z
+    .string()
+    .regex(
+      /^\d{5}(-\d{4})?$/,
+      "Invalid Zip code. Use 5 digits or 5 digits followed by a hyphen and 4 digits"
+    ),
+  phone: z
+    .string()
+    .regex(
+      /^\d{3}-\d{3}-\d{4}$/,
+      "Invalid phone number format. Use XXX-XXX-XXXX"
+    ),
+  notes: z.string().nullable().default(""),
+  active: z.boolean().default(true),
+});
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type selectCustomerSchemaType = z.infer<ReturnType<typeof selectCustomerSchema.parse> extends infer _ ? AnyZodObject : never>;
+export type insertCustomerSchemaType = z.infer<typeof insertCustomerSchema>;
+
+export type selectCustomerSchemaType = z.infer<typeof selectCustomerSchema>;

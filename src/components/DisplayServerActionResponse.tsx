@@ -26,6 +26,18 @@ const MessageBox = ({
 
 export function DisplayServerActionResponse({ result }: Props) {
   const { data, serverError, validationErrors } = result;
+   // Log messages here, outside JSX
+  if (data?.message) {
+    console.log("Success message:", data.message);
+  }
+
+  if (serverError) {
+    console.log("Server error:", serverError);
+  }
+
+  if (validationErrors) {
+    console.log("Validation errors:", validationErrors);
+  }
 
   return (
     <div>
