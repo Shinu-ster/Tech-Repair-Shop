@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Home() {
@@ -15,6 +16,9 @@ export default function Home() {
           <Link href="tel:9800000000" className="hover:underline">
             980-0000000
           </Link>
+          <Button>
+            <Link href="/tickets">Create Ticket</Link>
+          </Button>
         </div>
       </main>
     </div>

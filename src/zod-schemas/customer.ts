@@ -1,5 +1,3 @@
-import { createSelectSchema } from "drizzle-zod";
-import { customers } from "@/db/schema";
 import { z } from "zod";
 
 export const insertCustomerSchema = z.object({
